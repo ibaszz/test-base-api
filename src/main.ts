@@ -4,11 +4,12 @@ import { Logger } from './Common/logger/Logger';
 import { HttpExceptionFilter } from './Common/filter/HttpExceptionFilter';
 import { ValidationPipe, VersioningType } from '@nestjs/common';
 import helmet from 'helmet';
+import * as compression from 'compression';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
   const logger = app.get(Logger);
-  app.use(helmet());
+  app.use(helmet(), compression());
   app.useLogger(logger);
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalFilters(new HttpExceptionFilter(logger));

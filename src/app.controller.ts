@@ -6,8 +6,11 @@ import {
   Get,
   Body,
   Version,
+  CACHE_MANAGER,
+  Inject,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { Cache } from 'cache-manager';
 import { IsEmail, IsNotEmpty } from 'class-validator';
 import { AppService } from './app.service';
 import { AuthService } from './auth/auth.service';
@@ -29,7 +32,10 @@ class LoginRequestV2Dto extends BaseApiRequest {
 
 @Controller()
 export class AppController {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    @Inject(CACHE_MANAGER) private cache: Cache,
+  ) {}
 
   @Version('1')
   @Post('auth/login')
@@ -46,8 +52,9 @@ export class AppController {
     };
   }
 
-  @Post('auth/test')
+  @Get('auth/test')
   async test() {
-    return { hello: ':' };
+    const hello = await this.cache.get('user');
+    return { hello };
   }
 }

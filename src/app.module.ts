@@ -6,24 +6,13 @@ import { LoggerMiddleware } from './Common/middleware/LoggerMiddleware';
 import { AuthModule } from './auth/auth.module';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
+import { RedisModule } from './config/redis';
+import { RateLimitModule } from './config/rate-limit';
 
 @Module({
-  imports: [
-    LoggerModule,
-    AuthModule,
-    ThrottlerModule.forRoot({
-      ttl: 60,
-      limit: 3,
-    }),
-  ],
+  imports: [LoggerModule, AuthModule, RedisModule, RateLimitModule],
   controllers: [AppController],
-  providers: [
-    AppService,
-    {
-      provide: APP_GUARD,
-      useClass: ThrottlerGuard,
-    },
-  ],
+  providers: [AppService],
   exports: [LoggerModule],
 })
 export class AppModule implements NestModule {
