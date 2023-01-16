@@ -8,12 +8,22 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { RedisModule } from './config/redis';
 import { RateLimitModule } from './config/rate-limit';
+import { ProfileController } from './profile/profile.controller';
+import { ProfileService } from './profile/profile.service';
+import { ProfileModule } from './profile/profile.module';
 
 @Module({
-  imports: [LoggerModule, AuthModule, RedisModule, RateLimitModule],
+  imports: [
+    LoggerModule,
+    RedisModule,
+    RateLimitModule,
+
+    // route
+    AuthModule,
+    ProfileModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
-  exports: [LoggerModule],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
