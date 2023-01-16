@@ -4,7 +4,6 @@ import { AppService } from './app.service';
 import { LoggerModule } from './Common/logger';
 import { LoggerMiddleware } from './Common/middleware/LoggerMiddleware';
 import { AuthModule } from './auth/auth.module';
-import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [LoggerModule, AuthModule],
