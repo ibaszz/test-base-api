@@ -7,6 +7,10 @@ export enum ChannelRequest {
 }
 
 export class BaseApiRequest {
+  constructor(transactionId, channelId) {
+    this.transactionId = transactionId;
+    this.channel = channelId;
+  }
   @ApiProperty({ description: 'Free Text', default: 'SS12312839123' })
   @IsNotEmpty()
   transactionId: string;

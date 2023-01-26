@@ -16,20 +16,122 @@ model roles {
 }
 
 model users {
-  id          Int       @id(map: "USER_pkey") @default(autoincrement())
-  email       String?   @unique @db.VarChar(255)
-  companyName String?   @map("company_name") @db.VarChar(255)
-  name        String?   @db.VarChar(255)
-  password    String?   @db.VarChar(255)
-  googleId    String?   @map("google_id") @db.VarChar(255)
-  role        roles?    @relation(fields: [roleId], references: [id])
-  roleId      Int?      @map("role_id")
-  phone       String?   @db.VarChar(255)
-  detailInfo String?    @map("detail_info")
-  createdAt  DateTime? @default(now()) @db.Timestamp(6) @map("created_at")
-  updatedAt  DateTime? @updatedAt @db.Timestamp(6) @map("updated_at")
-  deletedAt  DateTime? @default(dbgenerated("TIMESTAMP 'epoch'")) @db.Timestamp(6) @map("deleted_at")
-  deletedBy  String?   @db.VarChar(255) @map("deleted_by")
-  createdBy  String?   @db.VarChar(255) @map("created_by")
-  updatedBy  String?   @db.VarChar(255) @map("updated_by")
+  id           Int            @id(map: "USER_pkey") @default(autoincrement())
+  email        String?        @unique @db.VarChar(255)
+  companyName  String?        @map("company_name") @db.VarChar(255)
+  name         String?        @db.VarChar(255)
+  password     String?        @db.VarChar(255)
+  googleId     String?        @map("google_id") @db.VarChar(255)
+  roleId       Int?           @map("role_id")
+  phone        String?        @db.VarChar(255)
+  detailInfo   String?        @map("detail_info")
+  createdAt    DateTime?      @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt    DateTime?      @updatedAt @map("updated_at") @db.Timestamp(6)
+  deletedAt    DateTime?      @default(dbgenerated("'1970-01-01 00:00:00'::timestamp without time zone")) @map("deleted_at") @db.Timestamp(6)
+  deletedBy    String?        @map("deleted_by") @db.VarChar(255)
+  createdBy    String?        @map("created_by") @db.VarChar(255)
+  updatedBy    String?        @map("updated_by") @db.VarChar(255)
+  supervisions supervisions[]
+  company companies?          @relation(fields: [companyId], references: [id])
+  companyId Int @map("company_id")
+  role         roles?         @relation(fields: [roleId], references: [id])
+
+}
+
+model supervisions {
+  id                Int                  @id(map: "SUPERVISION_pkey") @default(autoincrement())
+  userId            Int                  @map("user_id")
+  sumurKe           Int
+  createdAt         DateTime?            @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt         DateTime?            @updatedAt @map("updated_at") @db.Timestamp(6)
+  deletedAt         DateTime?            @default(dbgenerated("'1970-01-01 00:00:00'::timestamp without time zone")) @map("deleted_at") @db.Timestamp(6)
+  deletedBy         String?              @map("deleted_by") @db.VarChar(255)
+  createdBy         String?              @map("created_by") @db.VarChar(255)
+  updatedBy         String?              @map("updated_by") @db.VarChar(255)
+  supervisionDetail supervision_details?
+  supervisionWellSpec supervision_well_spec?
+  supervisionRequirement supervision_requirements?
+  supervisionScreenPipe supervision_screen_pipe[]
+  supervisionScreenAkuifer supervision_akuiver[]
+  user              users                @relation(fields: [userId], references: [id])
+}
+
+model supervision_details {
+  id                  Int                   @id(map: "SUPERVISION_DETAIL_pkey") @default(autoincrement())
+  supervisionId       Int                   @unique @map("supervision_id")
+  peruntukan          String?               @db.VarChar(255)
+  alamatSumur         String?               @map("alamat_sumur")
+  desa                String?               @db.VarChar(100)
+  kecamatan           String?               @db.VarChar(100)
+  kabupaten           String?               @db.VarChar(100)
+  provinsi            String?               @db.VarChar(100)
+  kedalamanSumur      Decimal?              @map("kedalaman_sumur") @db.Decimal
+  diameterLubangBor1A Decimal?              @map("diameter_lubang_bor_1A") @db.Decimal
+  diameterLubangBor1B Decimal?              @map("diameter_lubang_bor_1B") @db.Decimal
+  diameterLubangBor2A Decimal?              @map("diameter_lubang_bor_2A") @db.Decimal
+  diameterLubangBor2B Decimal?              @map("diameter_lubang_bor_2B") @db.Decimal
+  waktuPengeboranPHA  Decimal?              @map("waktu_pengeboran_ph_a") @db.Decimal
+  waktuPengeboranPHB  Decimal?              @map("waktu_pengeboran_ph_b") @db.Decimal
+  waktuPengeboranRHA  Decimal?              @map("waktu_pengeboran_rh_a") @db.Decimal
+  waktuPengeboranRHB  Decimal?              @map("waktu_pengeboran_rh_b") @db.Decimal
+  waterLoss           Boolean?              @map("water_loss")
+  lubangMudahRuntuh   Boolean?              @map("lubang_mudah_runtuh")
+  kedalamanKontruksi  Decimal?              @map("kedalaman_kontruksi") @db.Decimal
+  kedalamanMAT        Decimal?              @map("kedalaman_mat") @db.Decimal
+  catatanPengeboran   String?               @map("catatan_pengeboran")
+  coordinates         Unsupported("point")?
+  supervisions        supervisions          @relation(fields: [supervisionId], references: [id])
+}
+
+model supervision_well_spec {
+  id                  Int                   @id(map: "SUPERVISION_WELL_SPEC_pkey") @default(autoincrement())
+  supervisionId       Int                   @unique @map("supervision_id")
+  kedalamanSumurOpenHole Decimal @map("kedalaman_sumur_open_hole") @db.Decimal()
+  diameterTotalPipaUkur Decimal @map("diameter_total_pipa_ukur") @db.Decimal()
+  diameterTotalPipa Decimal @map("diameter_total_pipa") @db.Decimal()
+  jambangStart Decimal @map("jambang_start") @db.Decimal()
+  jambangEnd Decimal @map("jambang_end") @db.Decimal()
+  totalKedalamanKontruksi Decimal @map("total_kedalaman_kontruksi") @db.Decimal()
+  gravelStart Decimal @map("gravel_start") @db.Decimal()
+  gravelEnd Decimal @map("gravel_end") @db.Decimal()
+  lempungStart Decimal @map("lempung_start") @db.Decimal()
+  lempungEnd Decimal @map("lempung_end") @db.Decimal()
+  penyemenanStart Decimal @map("penyemenan_start") @db.Decimal()
+  penyemenanEnd Decimal @map("penyemenan_end") @db.Decimal()
+  diameterPipaNaik Decimal @map("diameter_pipa_naik") @db.Decimal()
+  panjangPipaNaik Decimal @map("panjang_pipa_naik") @db.Decimal()
+  catatanWellSpec String? @map("catatan_well_spec")
+  supervisions        supervisions          @relation(fields: [supervisionId], references: [id])
+}
+
+model supervision_requirements {
+  id Int @id(map:"supervision_requirement_pkey") @default(autoincrement())
+  supervisionId       Int                   @unique @map("supervision_id")
+  supervisions        supervisions          @relation(fields: [supervisionId], references: [id])
+  fieldCoordinator String? @map("field_coordinator") @db.VarChar(255)
+  juruBor String? @map("juru_bor") @db.VarChar(255)
+  wellsiteGeologist String? @map("wellsite_geologist") @db.VarChar(255)
+  teams String? 
+}
+
+model supervision_screen_pipe {
+  id Int @id(map:"supervision_screen_pipe_pkey") @default(autoincrement())
+  supervisionId       Int                   @map("supervision_id")
+  supervisions        supervisions          @relation(fields: [supervisionId], references: [id])
+  start Decimal @db.Decimal()
+  end Decimal @db.Decimal()
+}
+
+model supervision_akuiver {
+  id Int @id(map:"supervision_akuiver_pkey") @default(autoincrement())
+  supervisionId       Int                   @map("supervision_id")
+  supervisions        supervisions          @relation(fields: [supervisionId], references: [id])
+  start Decimal @db.Decimal()
+  end Decimal @db.Decimal()
+}
+
+model companies {
+  id Int @id(map:"companies_pkey") @default(autoincrement())
+  name String @db.VarChar(255)
+  user users[]
 }

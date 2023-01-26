@@ -1,27 +1,34 @@
 import { Body, Controller, Post, Version } from '@nestjs/common';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
+import BaseResponse from 'src/Common/response/BaseResponse';
 import { AuthService } from './auth.service';
 import { LoginRequestDto, LoginRequestV2Dto } from './request';
 
+@ApiTags('Auth Controller')
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
   @Version('1')
   @ApiBody({ type: LoginRequestDto })
-  @ApiTags('Login V1')
   @Post('login')
   async login(@Body() loginReq: LoginRequestDto) {
-    return this.authService.login(loginReq.email);
+    try {
+      const accessToken = await this.authService.login(loginReq.email);
+      return BaseResponse.createSuccessResponse(loginReq, accessToken);
+    } catch (e) {
+      return BaseResponse.createFailedResponse(loginReq, null, e.message);
+    }
   }
 
   @Version('2')
-  @ApiTags('Login V2')
   @ApiBody({ type: LoginRequestV2Dto })
   @Post('login')
   async loginV2(@Body() loginReq: LoginRequestV2Dto) {
-    return {
-      version: 2,
-      ...(await this.authService.login(loginReq.email)),
-    };
+    try {
+      const accessToken = await this.authService.login(loginReq.email);
+      return BaseResponse.createSuccessResponse(loginReq, accessToken);
+    } catch (e) {
+      return BaseResponse.createFailedResponse(loginReq, null, e.message);
+    }
   }
 }

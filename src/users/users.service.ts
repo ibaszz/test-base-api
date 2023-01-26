@@ -21,8 +21,6 @@ export class UsersService {
   async findOne(email: string): Promise<User | undefined> {
     const keys = `users::email::${email}`;
     let user: User = await this.cacheManager.get(keys);
-    console.log(user);
-    console.log(typeof user);
     if (!user) {
       this.logger.log('store to redis', { context: { keys, email } });
       user = await this.prisma.users.findUnique({ where: { email: email } });

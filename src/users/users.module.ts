@@ -2,7 +2,6 @@ import { CacheModule, Module } from '@nestjs/common';
 import * as redisStore from 'cache-manager-redis-store';
 import { LoggerModule } from 'src/Common/logger';
 import { DBModule } from 'src/config/db';
-import { PrismaService } from 'src/config/db/PrismaService';
 import { UsersService } from './users.service';
 
 @Module({
