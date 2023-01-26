@@ -53,6 +53,7 @@ model supervisions {
   supervisionRequirement supervision_requirements?
   supervisionScreenPipe supervision_screen_pipe[]
   supervisionScreenAkuifer supervision_akuiver[]
+  supervisionPhotos supervision_photos[]
   user              users                @relation(fields: [userId], references: [id])
 }
 
@@ -134,4 +135,24 @@ model companies {
   id Int @id(map:"companies_pkey") @default(autoincrement())
   name String @db.VarChar(255)
   user users[]
+}
+
+model supervision_photos {
+  id Int @id(map: "supervision_photo_pKey") @default(autoincrement())
+  supervisionId       Int                   @map("supervision_id")
+  supervisions        supervisions          @relation(fields: [supervisionId], references: [id])
+  tag TagPhoto @default(OTHERS)
+  photoUrl String @map("photo_url") @db.Text()
+  coordinates         Unsupported("point")
+  caption String @db.Text()
+}
+
+enum TagPhoto {
+  OTHERS
+  SITUASI_PENGAWASAN
+  PERALATAN
+  SPOEL
+  CUTTING
+  PIPA_DEKAT
+  PIPA_JAUH
 }
