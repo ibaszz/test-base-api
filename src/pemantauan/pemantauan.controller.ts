@@ -28,11 +28,26 @@ export class PemantauanController {
     return this.pemantauanService.create(createPemantauanDto);
   }
 
-  @Get()
-  async findAll(@Res({ passthrough: true }) res) {
+  @Get('/generate-pdf-html/:id')
+  async generatePdfHtml(
+    @Param('id') id: string,
+    @Res({ passthrough: true }) res,
+  ) {
+    const supervisions = await this.pemantauanService.findOne(+id);
+    const html = await this.pdfService.generatePemantauanPDFPuppeteerHtml(
+      supervisions,
+    );
+    res.set({ 'content-type': 'text/html' });
+    return html;
+  }
+
+  @Get('/generate-pdf/:id')
+  async findAll(@Param('id') id: string, @Res({ passthrough: true }) res) {
     try {
-      const buff: Buffer =
-        await this.pdfService.generatePemantauanPDFPuppeteer();
+      const supervisions = await this.pemantauanService.findOne(+id);
+      const buff: Buffer = await this.pdfService.generatePemantauanPDFPuppeteer(
+        supervisions,
+      );
       res.set({
         'Content-Type': 'application/pdf',
         'Content-Disposition': 'attachment; filename=invoice.pdf',

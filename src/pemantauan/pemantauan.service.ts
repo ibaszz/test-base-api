@@ -1,9 +1,17 @@
-import { Injectable } from '@nestjs/common';
+import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
+import { Logger } from 'src/Common/logger/Logger';
+import Cache from 'cache-manager';
+import { PrismaService } from 'src/config/db/PrismaService';
 import { CreatePemantauanDto } from './dto/create-pemantauan.dto';
 import { UpdatePemantauanDto } from './dto/update-pemantauan.dto';
 
 @Injectable()
 export class PemantauanService {
+  constructor(
+    private prisma: PrismaService,
+    private logger: Logger,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
+  ) {}
   create(createPemantauanDto: CreatePemantauanDto) {
     return 'This action adds a new pemantauan';
   }
@@ -13,7 +21,18 @@ export class PemantauanService {
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} pemantauan`;
+    return this.prisma.supervisions.findUnique({
+      where: { id: id },
+      include: {
+        user: true,
+        supervisionDetail: true,
+        supervisionRequirement: true,
+        supervisionPhotos: true,
+        supervisionScreenAkuifer: true,
+        supervisionScreenPipe: true,
+        supervisionWellSpec: true,
+      },
+    });
   }
 
   update(id: number, updatePemantauanDto: UpdatePemantauanDto) {

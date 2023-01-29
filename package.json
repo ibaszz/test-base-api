@@ -39,6 +39,7 @@
     "csurf": "^1.11.0",
     "helmet": "^6.0.1",
     "html-pdf-node": "^1.0.8",
+    "moment": "^2.29.4",
     "node-cache-manager": "^1.2.0",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.1",

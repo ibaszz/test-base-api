@@ -13,11 +13,12 @@
   }
   .page {
     display: grid;
-    grid-template-columns: 150px auto;
+    grid-template-columns: auto auto;
+    grid-gap: 10px;
     page-break-after: always;
   }
   .content-page {
-    font-size: 19px;
+    font-size: 17px;
   }
   .sub-layout {
     display: grid;
@@ -105,14 +106,13 @@
     /* display: grid;
     grid-template-columns: 285px 15px 23px; */
     display: grid;
-    grid-template-columns:  25% 1% auto auto 1px;
+    grid-template-columns:  40% 1% auto auto 1px;
   }
 
   .form-item-page-3-container {
     padding-left: 17px !important;
     display: grid;
     grid-template-columns: auto auto;
-    grid-template-rows: 26px;
     row-gap: 0;
     margin: 0;
   }
@@ -122,7 +122,7 @@
     align-items: center;
     display: grid;
     /* grid-template-columns: 285px 17px 60px 180px 60px 337px auto 134px; */
-    grid-template-columns: 25% auto auto auto auto auto auto auto 1px;
+    grid-template-columns: 40% auto auto auto auto auto auto auto 1px;
   }
 
   .checkbox {
@@ -142,19 +142,61 @@
   }
 
   .foto-grid {
+    page-break-before: auto;
+    page-break-inside: avoid;
     display: grid;
     grid-gap: 20px;
     grid-column-gap: 20px;
-    grid-template-columns: repeat(3, auto);
+    grid-template-columns: repeat(2, auto);
   }
 
   .sidebar-img {
-    width: 100px !important;
+    width: 80px !important;
   }
 
   .ruler-img {
-    width: 75px !important;
+    width: 55px !important;
   }
+
+  .container-photo {
+    position: relative;
+    color: white;
+    text-align: start;
+    align-content: flex-start;
+    align-self: flex-start;
+    align-items: flex-start;
+  }
+
+  .foto-container {
+    page-break-before: auto;
+    page-break-after: auto;
+    page-break-inside: avoid;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+
+  .bottom-right {
+    text-align: start;
+    align-content: flex-start;
+    align-self: flex-start;
+    align-items: flex-start;
+    color: black;
+    background-color: white;
+    opacity: 0.80;
+    font-size: 10px;
+    position: absolute;
+    top: 8px;
+    left: 16px;
+  }
+
+  .photo-grid-item {
+    width: 300px;
+    text-align: start;
+    align-content: flex-start;
+    align-self: flex-start;
+    align-items: flex-start;
+  }
+
 </style>
 <body>
   
@@ -296,7 +338,7 @@
           </div>
           <div class="title">
             <h4>Catatan</h4>
-            <p>{{catatan}}</p>
+            <p>{{catatanPengeboran}}</p>
           </div>
         </div>
     </div>
@@ -364,69 +406,7 @@
                   <li class="form-item-page-2-pipa-screen">
                     <span>Posisi Pipa Screen Low Carbon (Saringan)</span>
                     <ol>
-                      <li>
-                        <div class="form-item-page-2-pipa-screen-item">
-                          <span>:</span>
-                          <span>{{pipaScreen1-1}}</span>
-                          <span>s.d</span>
-                          <span>{{pipaScreen1-2}}</span>
-                          <span>m</span>
-                        </div>
-                      </li>
-                      <li>
-                        <div class="form-item-page-2-pipa-screen-item">
-                          <span>:</span>
-                          <span>{{pipaScreen2-1}}</span>
-                          <span>s.d</span>
-                          <span>{{pipaScreen2-2}}</span>
-                          <span>m</span>
-                        </div>
-                      </li>
-                      <li>
-                        <div class="form-item-page-2-pipa-screen-item">
-                          <span>:</span>
-                          <span>{{pipaScreen3-1}}</span>
-                          <span>s.d</span>
-                          <span>{{pipaScreen3-2}}</span>
-                          <span>m</span>
-                        </div>
-                      </li>
-                      <li>
-                        <div class="form-item-page-2-pipa-screen-item">
-                          <span>:</span>
-                          <span>{{pipaScreen4-1}}</span>
-                          <span>s.d</span>
-                          <span>{{pipaScreen4-2}}</span>
-                          <span>m</span>
-                        </div>
-                      </li>
-                      <li>
-                        <div class="form-item-page-2-pipa-screen-item">
-                          <span>:</span>
-                          <span>{{pipaScreen5-1}}</span>
-                          <span>s.d</span>
-                          <span>{{pipaScreen5-2}}</span>
-                          <span>m</span>
-                        </div>
-                      </li>
-                      <li>
-                        <div class="form-item-page-2-pipa-screen-item">
-                          <span>:</span>
-                          <span>{{pipaScreen6-1}}</span>
-                          <span>s.d</span>
-                          <span>{{pipaScreen6-2}}</span>
-                          <span>m</span>
-                        </div>
-                      </li>
-                      <li>
-                        <div class="form-item-page-2-pipa-screen-item">
-                          <span>:</span>
-                          <span>{{pipaScreen7-1}}</span>
-                          <span>s.d</span>
-                          <span>{{pipaScreen7-2}}</span>
-                          <span>m</span>
-                        </div>
-                      </li>
+                      {{pipascreenhtml}}
                     </ol>
                     
                   </li>
@@ -465,15 +445,15 @@
                   <li class="form-item-page-2">
                     <span>Diameter Dan Panjang Pipa Naik</span>
                     <span>:</span>
-                    <span>{{lempung1}}</span>
+                    <span>{{diameterpipanaik}}</span>
                     <span>inch</span>
-                    <span>{{lempung2}}</span>
+                    <span>{{panjangpipanaik}}</span>
                     <span>m</span>
                   </li>
                 </ul>
                 <div class="title" style="margin-bottom: 50px;">
                   <h4>Catatan</h4>
-                  <p>{{catatan}}</p>
+                  <p>{{catatanWell}}</p>
                 </div>
               </div>
           </div>
@@ -504,7 +484,7 @@
             </td>
           </tr>
         </table>
-        <div class="content-page">
+        <div class="content-page" style="font-size:16px">
           <div class="title" style="margin-bottom:20px">
               <h4>3. DATA KELENGKAPAN</h4>
           </div>
@@ -546,10 +526,7 @@
                   <span>Nama Anggota Tim</span>
                   <span>:</span>
                   <ol class="form-item-page-3-container">
-                    <li><span></span></li>
-                    <li><span></span></li>
-                    <li><span></span></li>
-                    <li><span></span></li>
+                    {{teams}}
                   </ol>
                 </div>
               </li>
@@ -732,7 +709,8 @@
           <div style="margin-bottom: 20px;">
               <h4>Visualisasi Sumur</h4>
           </div>
-              <iframe scrolling="no" width="750px" height="750px" src="https://rollable-neck.000webhostapp.com/?pipanaik=1&kedalamansumur=100&posisiscreen=25-35,75-80&corsumur=0-2&lempung=2-30&grovel=30-100&akuifer=10-20,35-45,60-100"></iframe>
+              <!-- <iframe scrolling="no" width="750px" height="750px" src="https://rollable-neck.000webhostapp.com/?pipanaik=1&kedalamansumur=100&posisiscreen=25-35,75-80&corsumur=0-2&lempung=2-30&grovel=30-100&akuifer=10-20,35-45,60-100"></iframe> -->
+              <iframe scrolling="no" width="500px" height="750px" src="https://rollable-neck.000webhostapp.com/?pipanaik={{panjangpipanaik}}&kedalamansumur={{ks}}&posisiscreen={{posisiscreens}}&corsumur={{semen1}}-{{semen2}}&lempung={{lempung1}}-{{lempung2}}&grovel={{gravel1}}-{{gravel2}}&akuifer={{akuivers}}"></iframe>
           </div>
         </div>
     </div>
@@ -762,47 +740,61 @@
           </tr>
         </table>
         <div class="content-page">
-          <div style="margin-top: 20px;margin-bottom: 20px;">
-            <h4>Foto Situasi Pengawasan Lengkap</h4>
+          <div class="foto-container">
+            <div style="margin-bottom: 20px;">
+              <h4>Foto Situasi Pengawasan Lengkap</h4>
+            </div>
+            <div class="foto-grid">
+              {{fotopengawasan}}
+            </div>
           </div>
-          <div class="foto-grid">
-            {{fotopengawasan}}
+          <div class="foto-container">
+            <div style="margin-bottom: 20px;">
+              <h4>Foto Peralatan Yang Sedang Dipergunakan</h4>
+            </div>
+            <div class="foto-grid">
+              {{fotoperalatan}}
+            </div>
           </div>
-          <div style="margin-top: 20px;margin-bottom: 20px;">
-            <h4>Foto Peralatan Yang Sedang Dipergunakan</h4>
+          <div class="foto-container">
+            <div style="margin-bottom: 20px;">
+              <h4>Foto Spoel Bak, Rig Pengeboran, Lubang Bor dan Mesin Bor</h4>
+            </div>
+            <div class="foto-grid">
+              {{fotospoelbak}}
+            </div>
           </div>
-          <div class="foto-grid">
-            {{fotoperalatan}}
+          <div class="foto-container">
+            <div style="margin-bottom: 20px;">
+              <h4>Foto Cutting Box dan catatan Cutting</h4>
+            </div>
+            <div class="foto-grid">
+              {{fotocutting}}
+            </div>
           </div>
-          <div style="margin-top: 20px;margin-bottom: 20px;">
-            <h4>Foto Spoel Bak, Rig Pengeboran, Lubang Bor dan Mesin Bor</h4>
+          <div class="foto-container">
+            <div style="margin-bottom: 20px;">
+              <h4>Foto pemasangan pipa buta atau saringan jarak dekat saat pengawasan konstruksi</h4>
+            </div>
+            <div class="foto-grid">
+              {{fotopipadekat}}
+            </div>
           </div>
-          <div class="foto-grid">
-            {{fotospoelbak}}
+          <div class="foto-container">
+            <div style="margin-bottom: 20px;">
+              <h4>Foto pemasangan pipa buta atau saringan jarak djauhekat saat pengawasan konstruksi</h4>
+            </div>
+            <div class="foto-grid">
+              {{fotopipajauh}}
+            </div>
           </div>
-          <div style="margin-top: 20px;margin-bottom: 20px;">
-            <h4>Foto Cutting Box dan catatan Cutting</h4>
-          </div>
-          <div class="foto-grid">
-            {{fotocutting}}
-          </div>
-          <div style="margin-top: 20px;margin-bottom: 20px;">
-            <h4>Foto pemasangan pipa buta atau saringan jarak dekat saat pengawasan konstruksi</h4>
-          </div>
-          <div class="foto-grid">
-            {{fotopipadekat}}
-          </div>
-          <div style="margin-top: 20px;margin-bottom: 20px;">
-            <h4>Foto pemasangan pipa buta atau saringan jarak djauhekat saat pengawasan konstruksi</h4>
-          </div>
-          <div class="foto-grid">
-            {{fotopipajauh}}
-          </div>
-          <div style="margin-top: 20px;margin-bottom: 20px;">
-            <h4>Foto lainnya apabila diperlukan</h4>
-          </div>
-          <div class="foto-grid">
-            {{fotolainnya}}
+          <div class="foto-container"></div>
+            <div style="margin-bottom: 20px;">
+              <h4>Foto lainnya apabila diperlukan</h4>
+            </div>
+            <div class="foto-grid">
+              {{fotolainnya}}
+            </div>
           </div>
         </div>
       </div>
