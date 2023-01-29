@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { readdirSync, readFileSync } from 'fs';
 import * as html_to_pdf from 'html-pdf-node';
+import * as latlonToXyz from 'latlon-to-xyz';
 import fs from 'fs';
 import puppeteer from 'puppeteer';
 import * as moment from 'moment';
@@ -74,8 +75,11 @@ export class PDFService {
     return parsedHtml;
   }
 
-  getHtml(html: string, supervision) {
+  getHtml(html: string, supervision: SupervisionsType) {
     const now = moment();
+
+    const [x, y, z] = latlonToXyz(-6.2477705,106.8296376);
+
     const parsedHtml = html
       .replace('{{hari}}', now.locale("id").format('dddd'))
       .replace('{{tanggal}}', now.locale("id").format('DD'))
@@ -92,9 +96,9 @@ export class PDFService {
       .replace('{{kecamatan}}', supervision.supervisionDetail.kecamatan)
       .replace('{{kabupaten}}', supervision.supervisionDetail.kabupaten)
       .replace('{{provinsi}}', supervision.supervisionDetail.provinsi)
-      .replace('{{koordX}}', '')
-      .replace('{{koordY}}', '')
-      .replace('{{koordZ}}', '')
+      .replace('{{koordX}}', x)
+      .replace('{{koordY}}', y)
+      .replace('{{koordZ}}', z)
       .replace(
         '{{ks}}',
         supervision.supervisionDetail.kedalamanSumur.toString(),
@@ -396,17 +400,5 @@ export class PDFService {
       );
 
     return parsedHtml;
-  }
-
-  calcPosFromLatLonRad(lat,lon,radius){
-  
-    const phi   = (90-lat)*(Math.PI/180);
-    const theta = (lon+180)*(Math.PI/180);
-
-    const x = -(radius * Math.sin(phi)*Math.cos(theta));
-    const z = (radius * Math.sin(phi)*Math.sin(theta));
-    const y = (radius * Math.cos(phi));
-  
-    return [x,y,z];
   }
 }

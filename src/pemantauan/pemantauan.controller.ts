@@ -6,17 +6,25 @@ import {
   Patch,
   Param,
   Delete,
+  Req,
   Res,
   Response as ResponseCommon,
   StreamableFile,
+  UseGuards,
 } from '@nestjs/common';
 import { PemantauanService } from './pemantauan.service';
 import { CreatePemantauanDto } from './dto/create-pemantauan.dto';
 import { UpdatePemantauanDto } from './dto/update-pemantauan.dto';
 import { PDFService } from 'src/Common/helper/PDFService';
-import { createReadStream } from 'fs';
+import { JwtAuthGuard } from 'src/auth/jwt-auth-guard';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { users } from '@prisma/client';
 
+
+@ApiTags('Pemantauan Controller')
 @Controller('pemantauan')
+@UseGuards(JwtAuthGuard)
+@ApiBearerAuth()
 export class PemantauanController {
   constructor(
     private readonly pemantauanService: PemantauanService,
@@ -24,8 +32,10 @@ export class PemantauanController {
   ) {}
 
   @Post()
-  create(@Body() createPemantauanDto: CreatePemantauanDto) {
-    return this.pemantauanService.create(createPemantauanDto);
+  create(@Req() req, @Body() createPemantauanDto: CreatePemantauanDto) {
+    const user = req.user;
+    console.log("asdasdsa",user);
+    return this.pemantauanService.create(createPemantauanDto, user);
   }
 
   @Get('/generate-pdf-html/:id')

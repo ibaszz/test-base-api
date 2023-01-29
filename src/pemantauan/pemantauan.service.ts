@@ -4,6 +4,7 @@ import Cache from 'cache-manager';
 import { PrismaService } from 'src/config/db/PrismaService';
 import { CreatePemantauanDto } from './dto/create-pemantauan.dto';
 import { UpdatePemantauanDto } from './dto/update-pemantauan.dto';
+import { users } from '@prisma/client';
 
 @Injectable()
 export class PemantauanService {
@@ -12,8 +13,8 @@ export class PemantauanService {
     private logger: Logger,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
-  create(createPemantauanDto: CreatePemantauanDto) {
-    return 'This action adds a new pemantauan';
+  create(createPemantauanDto: CreatePemantauanDto, user: any) {
+    return this.prisma.supervisions.create({data: {sumurKe: createPemantauanDto.sumurKe, userId: user.userId}})
   }
 
   findAll() {

@@ -4,11 +4,10 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
+import { users } from '@prisma/client';
 import Cache from 'cache-manager';
 import { Logger } from 'src/Common/logger/Logger';
 import { PrismaService } from 'src/config/db/PrismaService';
-
-export type User = any;
 
 @Injectable()
 export class UsersService {
@@ -18,9 +17,9 @@ export class UsersService {
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
-  async findOne(email: string): Promise<User | undefined> {
+  async findOne(email: string): Promise<users | undefined> {
     const keys = `users::email::${email}`;
-    let user: User = await this.cacheManager.get(keys);
+    let user: users = await this.cacheManager.get(keys);
     if (!user) {
       this.logger.log('store to redis', { context: { keys, email } });
       user = await this.prisma.users.findUnique({ where: { email: email } });
