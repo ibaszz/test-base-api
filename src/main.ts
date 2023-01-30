@@ -6,12 +6,13 @@ import { ValidationPipe, VersioningType } from '@nestjs/common';
 import helmet from 'helmet';
 import * as compression from 'compression';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { json, urlencoded } from 'express';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
   const logger = app.get(Logger);
 
-  app.use(helmet(), compression());
+  app.use(helmet(), compression(), json({limit: "50mb"}), urlencoded({extended: true, limit: "50mb"}));
   app.useLogger(logger);
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalFilters(new HttpExceptionFilter(logger));

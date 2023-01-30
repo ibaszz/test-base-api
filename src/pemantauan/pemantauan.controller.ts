@@ -21,6 +21,7 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { users } from '@prisma/client';
 import { CreatePemantauanDetailDto } from './dto/create-pemantauan-detail-dto';
 import { CreatePemantauanKelengkapanDto } from './dto/create-pemantauan-kelengkapan-dto';
+import { CreatePemantauanPhotoDto } from './dto/create-pemantauan-photo-dto';
 
 
 @ApiTags('Pemantauan Controller')
@@ -49,6 +50,12 @@ export class PemantauanController {
   createPemantauanKelengkapan(@Req() req, @Body() createPemantauanKelengkapan: CreatePemantauanKelengkapanDto) {
     const user = req.user;
     return this.pemantauanService.createPemantauanKelengkapan(createPemantauanKelengkapan, user);
+  }
+
+  @Post("/photos")
+  createPemantauanPhotos(@Req() req, @Body() createPemantauanPhoto: CreatePemantauanPhotoDto) {
+    const user = req.user;
+    return this.pemantauanService.createPhoto(createPemantauanPhoto, user);
   }
 
   @Get('/generate-pdf-html/:id')

@@ -8,11 +8,15 @@ import { users } from '@prisma/client';
 import { CreatePemantauanDetailDto } from './dto/create-pemantauan-detail-dto';
 import { CreatePemantauanKelengkapanDto } from './dto/create-pemantauan-kelengkapan-dto';
 import GeocodeService from 'src/Common/helper/GeocodeService';
+import { CreatePemantauanPhotoDto } from './dto/create-pemantauan-photo-dto';
+import S3Helper from 'src/Common/helper/S3Helper';
+import * as moment from 'moment';
 
 @Injectable()
 export class PemantauanService {
   constructor(
     private geocode: GeocodeService,
+    private s3Helper: S3Helper,
     private prisma: PrismaService,
     private logger: Logger,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
@@ -105,6 +109,21 @@ export class PemantauanService {
       this.logger.log(`[Request, CreatePemantauanDetail, supervision_requirements, SUCCESS] user: ${user.userId}, result: ${JSON.stringify(requirements)}`)
 
       return this.findOne(createPemantauanKelengkapan.supervisionId);
+  }
+
+  async createPhoto(createPemantauanPhoto: CreatePemantauanPhotoDto, user: any) { 
+    const buffer = Buffer.from(createPemantauanPhoto.base64, 'base64');
+    this.logger.log(`[Request, createPhoto] user: ${user.userId}`);
+    console.log(buffer);
+    const link = await this.s3Helper.putObject(`${createPemantauanPhoto.tag}/${createPemantauanPhoto.supervisionId}-${user.userId}-${moment().format("YYYYMMDDHHmmss")}.jpg`, buffer);
+    return this.prisma.supervision_photos.create({
+        data: {
+          supervisionId: createPemantauanPhoto.supervisionId,
+          caption: createPemantauanPhoto.caption,
+          photoUrl: link,
+          tag: createPemantauanPhoto.tag,
+        }
+      });
   }
 
   findAll() {
