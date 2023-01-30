@@ -19,6 +19,8 @@ import { PDFService } from 'src/Common/helper/PDFService';
 import { JwtAuthGuard } from 'src/auth/jwt-auth-guard';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { users } from '@prisma/client';
+import { CreatePemantauanDetailDto } from './dto/create-pemantauan-detail-dto';
+import { CreatePemantauanKelengkapanDto } from './dto/create-pemantauan-kelengkapan-dto';
 
 
 @ApiTags('Pemantauan Controller')
@@ -34,8 +36,19 @@ export class PemantauanController {
   @Post()
   create(@Req() req, @Body() createPemantauanDto: CreatePemantauanDto) {
     const user = req.user;
-    console.log("asdasdsa",user);
     return this.pemantauanService.create(createPemantauanDto, user);
+  }
+
+  @Post("/detail")
+  createPemantauanDetail(@Req() req, @Body() createPemantauanDetailDto: CreatePemantauanDetailDto) {
+    const user = req.user;
+    return this.pemantauanService.createPemantauanDetail(createPemantauanDetailDto, user);
+  }
+
+  @Post("/kelengkapan")
+  createPemantauanKelengkapan(@Req() req, @Body() createPemantauanKelengkapan: CreatePemantauanKelengkapanDto) {
+    const user = req.user;
+    return this.pemantauanService.createPemantauanKelengkapan(createPemantauanKelengkapan, user);
   }
 
   @Get('/generate-pdf-html/:id')
